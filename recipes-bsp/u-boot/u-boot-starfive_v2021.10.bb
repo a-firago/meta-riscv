@@ -21,6 +21,8 @@ SRCREV:visionfive2 = "1ae835c25e3d8b7bc3c8981fb720f030c1892d57"
 
 DEPENDS:append = " u-boot-tools-native"
 
+DEPENDS:append:visionfive2 = " jh7110-spl-tool-native"
+
 # Overwrite this for your server
 TFTP_SERVER_IP ?= "127.0.0.1"
 
@@ -32,6 +34,9 @@ do_configure:prepend() {
 
 do_deploy:append:visionfive2() {
     install -m 644 ${WORKDIR}/uEnv-visionfive2.txt ${DEPLOYDIR}/uEnv.txt
+    spl_tool -c -f ${DEPLOYDIR}/${SPL_IMAGE}
+    ln -sf ${SPL_IMAGE}.normal.out ${DEPLOYDIR}/${SPL_BINARYNAME}.normal.out
+    ln -sf ${SPL_IMAGE}.normal.out ${DEPLOYDIR}/${SPL_SYMLINK}.normal.out
 }
 
 COMPATIBLE_MACHINE = "(visionfive2)"
